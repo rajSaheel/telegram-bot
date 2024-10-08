@@ -30,7 +30,7 @@ constructor(private readonly adminService: AdminService) {}
   async googleRedirect(@Req() req,@Res() res) {
     const user = req.user;
     const token = await this.adminService.generateToken(user);
-    return res.redirect(`http://localhost:3000/login?token=${token}`);
+    return res.redirect(`${process.env.FRONTEND_APP}/login?token=${token}`);
   }
 
 
