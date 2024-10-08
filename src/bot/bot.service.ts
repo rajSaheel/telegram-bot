@@ -4,9 +4,7 @@ import axios from 'axios';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/admin/schemas/user.schema';
 import { Model } from 'mongoose';
-import { AdminBotService } from 'src/admin/adminBot.service';
 import { BotSettings } from 'src/admin/schemas/bot.schema';
-import { mergeWith } from 'rxjs';
 
 @Injectable()
 export class BotService implements OnModuleInit {
