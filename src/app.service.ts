@@ -16,10 +16,12 @@ export class AppService {
   async handleCron(){
     try{
       const subscribers = await this.userModel.find()
-      for (let subscriber of subscribers){
-        const message = await this.botService.getWeather(subscriber.city)
-        await this.botService.sendMessage(subscriber.chatId,message)
-      }
+      subscribers.forEach(async(subscriber,index)=>{
+        if(subscriber.subscribed && !subscriber.blocked) {
+          const message = await this.botService.getWeather(subscriber.city)
+          await this.botService.sendMessage(subscriber.chatId,message)
+        }
+      })
     }catch (e){
       console.log(e)
     }

@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminService } from './admin.service';
 
@@ -7,31 +7,37 @@ export class AdminController {
 constructor(private readonly adminService: AdminService) {}
   @Get('users')
   getAllUSers(){
-    return this.adminService.getAllUsers()
+    return this.adminService.getAllUsers();
   }
 
-  @Patch('users:id')
-  updateUSer(@Param('id')id:number){ 
-    return this.adminService.updateUserStatus(id,true)
+  @Patch('users/:chatId')
+  updateUser(@Param('chatId')chatId:number,@Body() body){
+    console.log(body)
+    const blocked = body.blocked;
+    
+    return this.adminService.updateUserStatus(chatId,blocked);
   }
 
-  @Delete('users:id')
-  deleteUser(@Param('id')id:number){
-    return this.adminService.deleteUser(id)
+  @Delete('users/:chatId')
+  deleteUser(@Param('chatId')chatId:number){
+    return this.adminService.deleteUser(chatId);
   }
 
   @Get('google/login')
   @UseGuards(AuthGuard('google'))
-  async googleLogin() {
-    // Google login route
+  async googleLogin() {}
+
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleRedirect(@Req() req,@Res() res) {
+    const user = req.user;
+    const token = await this.adminService.generateToken(user);
+    return res.redirect(`http://localhost:3000/login?token=${token}`);
   }
 
-  @Get('google/redirect')
-  @UseGuards(AuthGuard('google'))
-  async googleRedirect(@Req() req) {
-    return {
-      message: 'Google login successful',
-      user: req.user,
-    };
+
+  @Patch("botsettings")
+  updateBotSettings(){
+    return {message:"Success"}
   }
 }

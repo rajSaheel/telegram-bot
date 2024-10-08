@@ -10,17 +10,18 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './admin/schemas/user.schema';
 import { BotModule } from './bot/bot.module';
-import { AdminService } from './admin/admin.service';
 
 @Module({
-  imports: [ScheduleModule.forRoot(), AdminModule,ConfigModule.forRoot({
+  imports: [
+    ScheduleModule.forRoot(),
+    AdminModule,ConfigModule.forRoot({
     isGlobal:true,
     envFilePath: '.env'
   }),
-MongooseModule.forRoot(process.env.DATABASE_URI),
+    MongooseModule.forRoot(process.env.DATABASE_URI),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     BotModule],
-  controllers: [AppController, BotController, AdminController],
-  providers: [AppService, BotService,AdminService]
+  controllers: [AppController],
+  providers: [AppService,BotService]
 })
 export class AppModule {}
