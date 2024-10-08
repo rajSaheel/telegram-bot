@@ -12,9 +12,7 @@ constructor(private readonly adminService: AdminService) {}
 
   @Patch('users/:chatId')
   updateUser(@Param('chatId')chatId:number,@Body() body){
-    console.log(body)
     const blocked = body.blocked;
-    
     return this.adminService.updateUserStatus(chatId,blocked);
   }
 
