@@ -86,10 +86,14 @@ export class BotService implements OnModuleInit {
       this.bot.onText(/\/now/, async (msg) => {
         const chatId = msg.chat.id;
         const user = await this.userModel.findOne({ chatId }).exec();
-        if (user) {
-          const message = await this.getWeather(user.city);
-          this.bot.sendMessage(chatId, message);
+        let message = '';
+        if (user && user.subscribed) {
+          message = await this.getWeather(user.city);
+        } else {
+          message =
+            'You have not subscribed for the service.\nType /subscribe [city] to start the service\ne.g Type /subscribe London';
         }
+        this.bot.sendMessage(chatId, message);
       });
     } catch (e) {
       console.error(e);
