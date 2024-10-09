@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminService } from './admin.service';
 
@@ -28,14 +28,13 @@ constructor(private readonly adminService: AdminService) {}
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleRedirect(@Req() req,@Res() res) {
-    const user = req.user;
-    const token = await this.adminService.generateToken(user);
-    return res.redirect(`${process.env.FRONTEND_APP}/login?token=${token}`);
+    try {
+      const user = req.user;
+      const token = await this.adminService.generateToken(user);
+      return res.redirect(`http://localhost:3000/login?token=${token}`);
+    } catch (e) {
+      return { message: 'Failed to Login', status: 401 };
+    }
   }
 
-
-  @Patch("botsettings")
-  updateBotSettings(){
-    return {message:"Success"}
-  }
 }
