@@ -15,7 +15,7 @@ export class AppService {
     return 'Hello Visitor! You are on Telegram Bot server. Go check out the admin panel.';
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_6AM)
+  @Cron(CronExpression.EVERY_MINUTE)
   async handleCron() {
     try {
       const subscribers = await this.userModel.find().exec();
