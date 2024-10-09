@@ -12,7 +12,7 @@ export class AppService {
     @InjectModel(User.name) private userModel: Model<User>,
   ) {}
   getHello(): string {
-    return 'Hello World!';
+    return 'Hello Visitor! You are on Telegram Bot server. Go check out the admin panel.';
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_6AM)
