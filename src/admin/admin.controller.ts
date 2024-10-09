@@ -31,7 +31,7 @@ constructor(private readonly adminService: AdminService) {}
     try {
       const user = req.user;
       const token = await this.adminService.generateToken(user);
-      return res.redirect(`http://localhost:3000/login?token=${token}`);
+      return res.redirect(`${process.env.FRONTEND_APP}/login?token=${token}`);
     } catch (e) {
       return { message: 'Failed to Login', status: 401 };
     }
