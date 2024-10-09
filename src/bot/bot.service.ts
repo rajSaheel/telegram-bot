@@ -44,16 +44,24 @@ export class BotService implements OnModuleInit {
           );
         } else {
           if (user.city !== city) {
-            await this.userModel.findOneAndUpdate({ chatId }, { city });
+            await this.userModel.findOneAndUpdate(
+              { chatId },
+              { city, subscribed: true },
+            );
             this.bot.sendMessage(
               chatId,
               `Hello ${username}, welcome back! You have successfully subscribed and updated the city`,
             );
-          } else
+          } else {
+            await this.userModel.findOneAndUpdate(
+              { chatId },
+              { subscribed: true },
+            );
             this.bot.sendMessage(
               chatId,
               `Hello ${username}, welcome back! Glad to see you again`,
             );
+          }
         }
         const message = await this.getWeather(city);
         this.bot.sendMessage(chatId, message);
@@ -84,6 +92,7 @@ export class BotService implements OnModuleInit {
       this.bot.onText(/\/now/, async (msg) => {
         const chatId = msg.chat.id;
         const user = await this.userModel.findOne({ chatId }).exec();
+        console.log(user);
         let message = '';
         if (user && user.subscribed) {
           message = await this.getWeather(user.city);
